@@ -53,29 +53,29 @@ export default function Home() {
   const popularTools = tools.filter((tool) => tool.isPopular).slice(0, 6);
 
   return (
-    <div className="mx-auto max-w-[1500px]">
-      <section className="relative mb-8 overflow-hidden rounded-lg bg-gradient-to-br from-[#faf8ff] via-[#f7f1ff] to-[#efe7ff] px-10 py-10 shadow-[0_8px_35px_rgba(104,50,227,0.06)] dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 dark:shadow-none">
-        <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(circle_at_top_right,rgba(104,50,227,0.14),transparent_55%)]" />
+    <div className="mx-auto w-full max-w-[1500px]">
+      <section className="relative mb-6 overflow-hidden rounded-lg bg-gradient-to-br from-[#faf8ff] via-[#f7f1ff] to-[#efe7ff] px-5 py-7 shadow-[0_8px_35px_rgba(104,50,227,0.06)] dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 dark:shadow-none sm:px-7 sm:py-8 lg:mb-8 lg:px-10 lg:py-10">
+        <div className="pointer-events-none absolute right-0 top-0 h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(104,50,227,0.14),transparent_55%)] sm:w-1/2" />
         <div className="relative grid items-center gap-8 lg:grid-cols-[1fr_470px]">
-          <div>
-            <h1 className="max-w-2xl text-[52px] font-black leading-[1.05] tracking-normal text-gray-950 dark:text-white">
+          <div className="min-w-0">
+            <h1 className="max-w-2xl text-4xl font-black leading-[1.08] tracking-normal text-gray-950 dark:text-white sm:text-5xl lg:text-[52px]">
               All-in-One <br />
               <span className="text-webpeaker-600">Web Tools</span> Platform
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-gray-500 dark:text-gray-300">
+            <p className="mt-5 max-w-xl text-sm leading-6 text-gray-500 dark:text-gray-300 sm:text-base sm:leading-7 lg:mt-6">
               Fast, free and easy-to-use online tools for everyday tasks.
               <br />
               No sign-up required. <span className="font-bold text-webpeaker-600">100% free</span> to use!
             </p>
 
-            <div className="mt-7 flex max-w-[540px] items-center rounded-lg border border-webpeaker-500 bg-white px-5 py-4 shadow-sm transition-all focus-within:ring-4 focus-within:ring-webpeaker-100 dark:bg-gray-950 dark:focus-within:ring-webpeaker-900/40">
-              <Search className="mr-4 text-gray-500 dark:text-gray-400" size={24} />
+            <div className="mt-6 flex w-full max-w-[540px] items-center rounded-lg border border-webpeaker-500 bg-white px-4 py-3 shadow-sm transition-all focus-within:ring-4 focus-within:ring-webpeaker-100 dark:bg-gray-950 dark:focus-within:ring-webpeaker-900/40 sm:px-5 sm:py-4 lg:mt-7">
+              <Search className="mr-3 shrink-0 text-gray-500 dark:text-gray-400 sm:mr-4" size={22} />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 type="search"
                 placeholder="Search any tool..."
-                className="w-full bg-transparent text-base font-medium text-gray-800 outline-none placeholder:text-gray-400 dark:text-gray-100"
+                className="min-w-0 w-full bg-transparent text-sm font-medium text-gray-800 outline-none placeholder:text-gray-400 dark:text-gray-100 sm:text-base"
               />
             </div>
 
@@ -94,8 +94,8 @@ export default function Home() {
       </section>
 
       <section className="mb-7">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="flex items-center gap-3 text-xl font-black text-gray-950 dark:text-white">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="flex items-center gap-3 text-lg font-black text-gray-950 dark:text-white sm:text-xl">
             <TrendingUp className="text-webpeaker-600" size={22} /> Popular Tools
           </h2>
           <button
@@ -104,12 +104,12 @@ export default function Home() {
               setQuery('');
               setActiveCategory('all');
             }}
-            className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 transition hover:border-webpeaker-200 hover:text-webpeaker-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200"
+            className="w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 transition hover:border-webpeaker-200 hover:text-webpeaker-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 sm:w-auto"
           >
             View all
           </button>
         </div>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {popularTools.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />
           ))}
@@ -117,8 +117,8 @@ export default function Home() {
       </section>
 
       <section className="mb-7">
-        <h2 className="mb-4 text-xl font-black text-gray-950 dark:text-white">Browse by Category</h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <h2 className="mb-4 text-lg font-black text-gray-950 dark:text-white sm:text-xl">Browse by Category</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {categories.slice(0, 15).map((cat) => {
             const CatIcon = cat.icon;
             const isActive = activeCategory === cat.id;
@@ -128,15 +128,15 @@ export default function Home() {
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveCategory(isActive ? 'all' : cat.id)}
-                className={`flex items-center gap-4 rounded-lg border bg-white p-4 text-left shadow-[0_8px_30px_rgba(17,24,39,0.03)] transition dark:bg-gray-900 dark:shadow-none ${
+                className={`flex min-w-0 items-center gap-4 rounded-lg border bg-white p-4 text-left shadow-[0_8px_30px_rgba(17,24,39,0.03)] transition dark:bg-gray-900 dark:shadow-none ${
                   isActive ? 'border-webpeaker-500 ring-4 ring-webpeaker-100 dark:ring-webpeaker-900/40' : 'border-gray-100 hover:border-webpeaker-100 dark:border-gray-800 dark:hover:border-webpeaker-900'
                 }`}
               >
                 <span className={`flex h-12 w-12 items-center justify-center rounded-lg ${cat.bg} ${cat.color}`}>
                   <CatIcon size={24} strokeWidth={1.9} />
                 </span>
-                <span>
-                  <span className="block text-sm font-black text-gray-950 dark:text-gray-100">{cat.name}</span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-black text-gray-950 dark:text-gray-100">{cat.name}</span>
                   <span className="mt-1 block text-xs font-semibold text-gray-400 dark:text-gray-500">{cat.count}</span>
                 </span>
               </button>
@@ -146,9 +146,9 @@ export default function Home() {
       </section>
 
       <section>
-        <div className="mb-4 flex items-end justify-between gap-4">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
-            <h2 className="text-xl font-black text-gray-950 dark:text-white">All Utility Tools</h2>
+            <h2 className="text-lg font-black text-gray-950 dark:text-white sm:text-xl">All Utility Tools</h2>
             <p className="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">
               Showing {filteredTools.length} of {tools.length} tools.
             </p>
@@ -160,7 +160,7 @@ export default function Home() {
                 setQuery('');
                 setActiveCategory('all');
               }}
-              className="rounded-lg bg-white px-4 py-2 text-sm font-bold text-gray-500 shadow-sm hover:text-webpeaker-600 dark:bg-gray-900 dark:text-gray-300 dark:shadow-none"
+              className="w-full rounded-lg bg-white px-4 py-2 text-sm font-bold text-gray-500 shadow-sm hover:text-webpeaker-600 dark:bg-gray-900 dark:text-gray-300 dark:shadow-none sm:w-auto"
             >
               Clear filters
             </button>
@@ -168,13 +168,13 @@ export default function Home() {
         </div>
 
         {filteredTools.length > 0 ? (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {filteredTools.map((tool) => (
               <ToolCard key={`${tool.categoryId}-${tool.id}`} tool={tool} />
             ))}
           </div>
         ) : (
-          <div className="rounded-lg border border-gray-100 bg-white p-10 text-center shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:shadow-none">
+          <div className="rounded-lg border border-gray-100 bg-white p-6 text-center shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:shadow-none sm:p-10">
             <p className="font-bold text-gray-800 dark:text-gray-100">No matching tools found.</p>
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Try searching for text, image, JSON, PDF, password, URL, CSS, API, or date.</p>
             <Link to="/" onClick={() => setQuery('')} className="mt-4 inline-flex rounded-lg bg-webpeaker-600 px-4 py-2 text-sm font-bold text-white">
