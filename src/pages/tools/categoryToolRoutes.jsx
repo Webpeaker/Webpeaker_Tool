@@ -40,7 +40,7 @@ import AsciiConverter from './encoding/AsciiConverter';
 export const categoryToolRoutes = [
   { path: 'tools/remove-spaces-duplicates', element: <RemoveSpacesDuplicates /> },
   { path: 'tools/text-sorter', element: <TextSorter /> },
-  { path: 'tools/find-replace', element: <FindReplace /> },
+  { path: 'tools/find-and-replace', element: <FindReplace /> },
   { path: 'tools/reverse-text', element: <ReverseText /> },
   { path: 'tools/bulk-text-replace-tool', element: <BulkTextReplaceTool /> },
   { path: 'tools/clipboard-history-manager', element: <ClipboardHistoryManager /> },

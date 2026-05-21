@@ -265,7 +265,7 @@ const toolDescriptions = {
   'text-formatter': 'Clean, sort, deduplicate, and format pasted text for reuse.',
   'remove-spaces-duplicates': 'Remove whitespace, clean repeated spacing, and delete duplicate words or lines.',
   'text-sorter': 'Sort lines alphabetically in ascending or descending order.',
-  'find-replace': 'Replace matching words, phrases, or full lines using find=>replace.',
+  'find-and-replace': 'Replace matching words, phrases, or full lines using find=>replace.',
   'reverse-text': 'Reverse characters in any text input instantly.',
   'bulk-text-replace-tool': 'Run multiple find=>replace rules over the same text in one pass.',
   'clipboard-history-manager': 'Save recent text snapshots during your browser session.',
