@@ -338,6 +338,77 @@ function getCategoryToolActions(categoryId, toolName) {
   return createEncodingActions(toolName);
 }
 
+const secondaryActions = new Set([
+  'replace',
+  'bulk-replace',
+  'json-path',
+  'json-merge',
+  'regex-test',
+  'regex-extract',
+  'regex-replace',
+  'uuid',
+  'diff',
+  'critical-css',
+]);
+
+const getInputPlaceholder = (tool, actions) => {
+  const action = actions[0];
+  const examples = {
+    'remove-spaces': 'Example: hello   world   again',
+    trim: 'Example: hello     world\n\n\nnew paragraph',
+    dedupe: 'Example: apple apple orange\nor duplicate lines on separate rows',
+    'sort-asc': 'Example:\nBanana\nApple\nCherry',
+    replace: 'Text to edit goes here. Example: I like apples and apples are sweet.',
+    'bulk-replace': 'Text to edit goes here. Example: red apple and green banana',
+    reverse: 'Example: WebPeaker',
+    'extract-email': 'Example: Contact sales@example.com and help@example.org',
+    'extract-phone': 'Example: Call +91 9876543210 or 555-123-4567',
+    'detect-encoding': 'Example: Hello नमस्ते こんにちは',
+    'unicode-encode': 'Example: A नमस्ते',
+    'markdown-preview': 'Example:\n# Title\n**Bold text** and `code`',
+    slug: 'Example: My New Blog Post Title',
+    camel: 'Example: my new variable name',
+    'json-format': 'Example: {"name":"WebPeaker","active":true}',
+    'json-schema': 'Example: {"name":"WebPeaker","active":true}',
+    'json-path': 'Example: {"user":{"name":"Rohit","city":"Delhi"}}',
+    'json-merge': 'First JSON object. Example: {"name":"Rohit"}',
+    'json-split': 'Example: {"name":"Rohit","city":"Delhi"}',
+    'regex-generate': 'Describe what to match. Example: email address',
+    'regex-test': 'Text to test. Example: Error 404 at /login',
+    'regex-replace': 'Text to edit. Example: Order 123 and Order 456',
+    uuid: 'Leave empty, or enter count in the extra input.',
+    diff: 'First text/code block to compare.',
+    'critical-css': 'Paste CSS rules here. Example: .hero { color: red; }',
+    'html-table': 'Example:\nName,Age\nRohit,25\nAsha,30',
+    'line-count': 'Paste code or text to count lines.',
+    'base64-encode': 'Example: Hello WebPeaker',
+    'url-encode': 'Example: https://example.com/search?q=hello world',
+    'html-encode': 'Example: <div class="box">Hello & welcome</div>',
+    'binary-encode': 'Example: Hello',
+    'ascii-codes': 'Example: ABC',
+  };
+
+  return examples[action] || `Example input for ${tool.name}`;
+};
+
+const getSecondaryPlaceholder = (actions) => {
+  const action = actions.find((item) => secondaryActions.has(item));
+  const examples = {
+    replace: 'Example: apples=>oranges',
+    'bulk-replace': 'Example:\nred=>blue\napple=>mango',
+    'json-path': 'Example: $.user.name',
+    'json-merge': 'Second JSON object. Example: {"city":"Delhi"}',
+    'regex-test': 'Example: /error|warning/gi',
+    'regex-extract': 'Example: /\\d+/g',
+    'regex-replace': 'Example: /Order \\d+/g=>Order XXXX',
+    uuid: 'Example: 10',
+    diff: 'Second text/code block to compare.',
+    'critical-css': 'Selectors to keep. Example: .hero, #main',
+  };
+
+  return examples[action] || 'Extra input for this tool.';
+};
+
 export default function CategoryToolPage({ categoryId, toolId }) {
   const { slug } = useParams();
   const activeSlug = toolId || slug;
@@ -364,6 +435,9 @@ export default function CategoryToolPage({ categoryId, toolId }) {
 
   const Icon = tool.icon;
   const actions = getCategoryToolActions(categoryId, tool.name);
+  const hasSecondaryInput = actions.some((action) => secondaryActions.has(action));
+  const inputPlaceholder = getInputPlaceholder(tool, actions);
+  const secondaryPlaceholder = getSecondaryPlaceholder(actions);
   const wordCount = input.trim() ? input.trim().split(/\s+/).length : 0;
 
   const run = async (action) => {
@@ -523,16 +597,18 @@ export default function CategoryToolPage({ categoryId, toolId }) {
           <textarea
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Paste the text, code, JSON, URL, or encoded value for this tool..."
+            placeholder={inputPlaceholder}
             spellCheck={false}
             className="h-72 w-full resize-none rounded-lg border border-gray-200 bg-gray-50 p-4 font-mono text-sm text-gray-800 outline-none transition focus:border-webpeaker-500 focus:bg-white focus:ring-4 focus:ring-webpeaker-100 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
           />
-          <input
-            value={secondary}
-            onChange={(event) => setSecondary(event.target.value)}
-            placeholder="Optional: use find=>replace for replacement, /pattern/g=>replace for regex, compare text, JSON path, or count..."
-            className="mt-3 w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-webpeaker-500 focus:ring-4 focus:ring-webpeaker-100 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
-          />
+          {hasSecondaryInput && (
+            <input
+              value={secondary}
+              onChange={(event) => setSecondary(event.target.value)}
+              placeholder={secondaryPlaceholder}
+              className="mt-3 w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-webpeaker-500 focus:ring-4 focus:ring-webpeaker-100 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
+            />
+          )}
           <div className="mt-4 flex flex-wrap gap-2">
             {actions.map((action, index) => (
               <button

@@ -428,6 +428,124 @@ const analyzeGenericInput = (value, toolName) => [
   value.trim() || 'No input provided yet.',
 ].join('\n');
 
+const dateInput = (value, fallback = new Date()) => {
+  const date = value.trim() ? new Date(value.trim()) : fallback;
+  if (Number.isNaN(date.getTime())) throw new Error('Enter a valid date, for example: 2026-05-22 18:30');
+  return date;
+};
+
+const formatDuration = (milliseconds) => {
+  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+};
+
+const timeZoneConverter = (value, zonesValue) => {
+  const date = dateInput(value);
+  const zones = (zonesValue || 'UTC, Asia/Kolkata, America/New_York, Europe/London')
+    .split(',')
+    .map((zone) => zone.trim())
+    .filter(Boolean);
+
+  return zones
+    .map((zone) => {
+      try {
+        return `${zone}: ${new Intl.DateTimeFormat('en-US', {
+          dateStyle: 'full',
+          timeStyle: 'long',
+          timeZone: zone,
+        }).format(date)}`;
+      } catch {
+        return `${zone}: invalid time zone`;
+      }
+    })
+    .join('\n');
+};
+
+const ageCalculator = (value) => {
+  const birth = dateInput(value);
+  const now = new Date();
+  let years = now.getFullYear() - birth.getFullYear();
+  let months = now.getMonth() - birth.getMonth();
+  let days = now.getDate() - birth.getDate();
+
+  if (days < 0) {
+    months -= 1;
+    days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+  }
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  const totalDays = Math.floor((now - birth) / 86400000);
+  return `Age: ${years} years, ${months} months, ${days} days\nTotal days: ${totalDays}\nTotal months: ${Math.floor(totalDays / 30.436875)}`;
+};
+
+const dateDifference = (value, secondValue) => {
+  const [firstInput, secondInputFromValue] = value.split(/\s+(?:to|-)\s+/i);
+  const start = dateInput(firstInput);
+  const end = dateInput(secondValue || secondInputFromValue || new Date().toISOString());
+  const diff = Math.abs(end - start);
+  return `Start: ${start.toLocaleString()}\nEnd: ${end.toLocaleString()}\nDifference: ${formatDuration(diff)}\nTotal days: ${(diff / 86400000).toFixed(2)}\nTotal hours: ${(diff / 3600000).toFixed(2)}`;
+};
+
+const timestampTool = (value) => {
+  if (!value.trim()) {
+    const now = new Date();
+    return `Milliseconds: ${now.getTime()}\nSeconds: ${Math.floor(now.getTime() / 1000)}\nISO: ${now.toISOString()}\nLocal: ${now.toLocaleString()}`;
+  }
+
+  const trimmed = value.trim();
+  const numeric = Number(trimmed);
+  const date = Number.isFinite(numeric)
+    ? new Date(trimmed.length <= 10 ? numeric * 1000 : numeric)
+    : dateInput(trimmed);
+
+  return `Milliseconds: ${date.getTime()}\nSeconds: ${Math.floor(date.getTime() / 1000)}\nISO: ${date.toISOString()}\nLocal: ${date.toLocaleString()}`;
+};
+
+const countdown = (value) => {
+  const target = dateInput(value);
+  return `Target: ${target.toLocaleString()}\nRemaining: ${formatDuration(target - new Date())}`;
+};
+
+const cronGenerator = (value) => {
+  const lower = value.toLowerCase();
+  if (lower.includes('hour')) return '0 * * * *';
+  if (lower.includes('minute')) return '* * * * *';
+  if (lower.includes('week')) return '0 9 * * 1';
+  if (lower.includes('month')) return '0 9 1 * *';
+  if (lower.includes('midnight')) return '0 0 * * *';
+  return '0 9 * * *';
+};
+
+const cronReader = (value) => {
+  const parts = value.trim().split(/\s+/);
+  if (parts.length !== 5) throw new Error('Enter a 5-part cron expression, for example: 0 9 * * 1');
+  const [minute, hour, dayMonth, month, dayWeek] = parts;
+  return `Minute: ${minute}\nHour: ${hour}\nDay of month: ${dayMonth}\nMonth: ${month}\nDay of week: ${dayWeek}`;
+};
+
+const durationCalculator = (value) => {
+  const matches = [...value.matchAll(/(\d+(?:\.\d+)?)\s*(d|day|days|h|hr|hour|hours|m|min|minute|minutes|s|sec|second|seconds)/gi)];
+  if (!matches.length) return dateDifference(value, '');
+  const seconds = matches.reduce((total, [, rawAmount, unit]) => {
+    const amount = Number(rawAmount);
+    const normalized = unit.toLowerCase();
+    if (normalized.startsWith('d')) return total + amount * 86400;
+    if (normalized.startsWith('h')) return total + amount * 3600;
+    if (normalized.startsWith('m')) return total + amount * 60;
+    return total + amount;
+  }, 0);
+  return `Total seconds: ${seconds}\nTotal minutes: ${(seconds / 60).toFixed(2)}\nTotal hours: ${(seconds / 3600).toFixed(2)}\nReadable: ${formatDuration(seconds * 1000)}`;
+};
+
+const worldClock = (zonesValue) => timeZoneConverter('', zonesValue);
+
 const readFileAsDataUrl = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -545,12 +663,96 @@ const getToolActions = (tool, lower) => {
     add('api-request', 'Send Request');
     add('json-format', 'Format JSON', 'soft');
   }
-  if (lower.includes('timestamp')) add('timestamp', 'Timestamp');
-  if (lower.includes('date difference')) add('date-diff', 'Date Difference');
+  if (tool.categoryId === 'time') {
+    if (lower.includes('time zone')) add('time-zone', 'Convert Time');
+    else if (lower.includes('age')) add('age-calc', 'Calculate Age');
+    else if (lower.includes('date difference')) add('date-diff', 'Calculate Difference');
+    else if (lower.includes('countdown')) add('countdown', 'Calculate Countdown');
+    else if (lower.includes('cron') && lower.includes('generator')) add('cron-generate', 'Generate Cron');
+    else if (lower.includes('cron') && lower.includes('reader')) add('cron-read', 'Read Cron');
+    else if (lower.includes('duration')) add('duration-calc', 'Calculate Duration');
+    else if (lower.includes('world clock')) add('world-clock', 'Show Clocks');
+    else add('timestamp', lower.includes('generator') ? 'Generate Timestamp' : 'Convert Timestamp');
+  }
   if (lower.includes('statistics') || lower.includes('mean')) add('stats', 'Calculate Stats');
   if (tool.categoryId === 'qr') add('qr-note', 'QR Workflow');
 
   return actions.length ? actions : [{ action: 'generic-analyze', label: 'Analyze Input', tone: 'primary' }];
+};
+
+const secondaryActions = new Set([
+  'find',
+  'regex-test',
+  'regex-extract',
+  'dns-lookup',
+  'api-request',
+  'css-generate',
+  'seo-generate',
+  'security-run',
+  'random-generate',
+  'gradient',
+  'date-diff',
+  'time-zone',
+  'world-clock',
+]);
+
+const getUniversalInputPlaceholder = (tool, lower) => {
+  const byId = {
+    'time-zone-converter': 'Example: 2026-05-22 18:30',
+    'age-calculator': 'Example: 2000-01-15',
+    'date-difference': 'Example: 2026-05-22 to 2026-12-31',
+    'timestamp-converter': 'Example timestamp: 1716388200\nor date: 2026-05-22 18:30',
+    'countdown-timer': 'Example: 2026-12-31 23:59',
+    'cron-expression-generator': 'Example: every monday at 9am\nor: daily at midnight',
+    'cron-expression-reader': 'Example: 0 9 * * 1',
+    'timestamp-generator': 'Leave empty and click Generate Timestamp.',
+    'time-duration-calculator': 'Example: 2 days 4 hours 30 minutes\nor: 2026-05-22 to 2026-05-25',
+    'world-clock-tool': 'Leave empty and click Show Clocks.',
+    'percentage-calculator': 'Example: 25 200',
+    'bmi-calculator': 'Example: 70 170',
+    'loan-calculator': 'Example: 100000 10 12',
+    'statistics-calculator-mean-median-mode': 'Example: 10 20 30 40 50',
+    'json-csv': 'Example: [{"name":"Rohit","city":"Delhi"}]',
+    'xml-json': 'Example JSON: {"name":"Rohit","city":"Delhi"}',
+    'yaml-json': 'Example JSON: {"name":"Rohit","city":"Delhi"}',
+    'url-parser': 'Example: https://example.com/path?q=hello#top',
+    'url-validator': 'Example: https://example.com',
+    'query-builder': 'Example: https://example.com/search?q=hello',
+    'url-parameter-extractor': 'Example: https://example.com/?utm_source=google&page=2',
+    'utm-campaign-builder': 'Example: https://example.com',
+  };
+
+  if (byId[tool.id]) return byId[tool.id];
+  if (lower.includes('regex')) return 'Sample text here. Put the regex pattern in the extra input.';
+  if (['web', 'network', 'api', 'url'].includes(tool.categoryId)) return 'Example: https://example.com';
+  if (tool.categoryId === 'math') return 'Example: 25 200 or 70 170';
+  if (tool.categoryId === 'data') return 'Example: {"name":"Rohit","city":"Delhi"}';
+  if (tool.categoryId === 'seo') return 'Example title or page text: Best Free Web Tools';
+  if (tool.categoryId === 'css') return 'Example: #6832E3 or .button';
+  if (tool.categoryId === 'random') return 'Leave empty, or type a seed/value when useful.';
+  if (tool.categoryId === 'security') return lower.includes('password') ? 'Leave empty, or type a password to check.' : 'Example: text or token to process';
+  return `Example input for ${tool.name}`;
+};
+
+const getUniversalSecondaryPlaceholder = (tool, lower) => {
+  const byActionOrId = {
+    'time-zone-converter': 'Example: UTC, Asia/Kolkata, America/New_York',
+    'date-difference': 'End date if not using "to". Example: 2026-12-31',
+    'world-clock-tool': 'Example: UTC, Asia/Kolkata, Europe/London',
+    'dns-lookup': 'Example: A, AAAA, MX, TXT, CNAME',
+    'api-request': 'Example: {"method":"GET"}',
+    'random-name': 'Example count: 5',
+    'random-password': 'Example count: 10',
+    'random-number': 'Example count: 20',
+  };
+
+  if (byActionOrId[tool.id]) return byActionOrId[tool.id];
+  if (lower.includes('regex')) return 'Example: /error|warning/gi';
+  if (tool.categoryId === 'random') return 'Example count: 5';
+  if (tool.categoryId === 'css') return 'Second value if needed. Example: #14B8A6';
+  if (tool.categoryId === 'seo') return 'Description or second value. Example: Fast browser tools';
+  if (tool.categoryId === 'security') return 'Length or extra value. Example: 18';
+  return 'Extra value for this tool.';
 };
 
 export default function UniversalTool() {
@@ -580,30 +782,9 @@ export default function UniversalTool() {
   const isVisual = ['image', 'pdf', 'file', 'media', 'qr'].includes(tool.categoryId);
   const needsFileInput = isVisual || lower.includes('base64') || lower.includes('metadata') || lower.includes('checksum') || tool.categoryId === 'file';
   const toolActions = getToolActions(tool, lower);
-  const inputPlaceholder = lower.includes('regex')
-    ? 'For generator: describe the pattern or paste a sample. For tester: paste sample text here...'
-    : ['web', 'network', 'api', 'url'].includes(tool.categoryId)
-      ? 'Enter a URL or domain, for example: https://example.com'
-    : tool.categoryId === 'math'
-      ? 'Enter numbers, for example: 25 200 or 70 170'
-    : tool.categoryId === 'data'
-      ? 'Paste JSON, CSV, XML, YAML, or tabular data...'
-    : tool.categoryId === 'seo'
-      ? 'Enter title, URL, keywords, or page text...'
-    : tool.categoryId === 'css'
-      ? 'Enter a CSS value, selector, color, size, or setting...'
-    : 'Paste text, JSON, URL, numbers, tokens, or any content this tool should process...';
-  const secondaryPlaceholder = lower.includes('regex')
-    ? 'Regex pattern for testing, for example: /[A-Z]+\\d*/g'
-    : tool.categoryId === 'network'
-      ? 'Optional DNS record type: A, AAAA, MX, TXT, CNAME...'
-    : tool.categoryId === 'api'
-      ? 'Optional JSON options: {"method":"POST","headers":{"Content-Type":"application/json"},"body":{"hello":"world"}}'
-    : tool.categoryId === 'random'
-      ? 'Optional count'
-    : tool.categoryId === 'css' || tool.categoryId === 'seo'
-      ? 'Optional second value, color, description, or setting...'
-    : 'Optional: find=>replace, password length, second color, description, count...';
+  const hasSecondaryInput = toolActions.some((item) => secondaryActions.has(item.action));
+  const inputPlaceholder = getUniversalInputPlaceholder(tool, lower);
+  const secondaryPlaceholder = getUniversalSecondaryPlaceholder(tool, lower);
 
   const run = async (action) => {
     setNotice('');
@@ -641,6 +822,13 @@ export default function UniversalTool() {
       if (action === 'dns-lookup') setOutput(await dnsLookup(input, secondary));
       if (action === 'domain-inspect') setOutput(inspectDomain(input, tool.name));
       if (action === 'api-request') setOutput(await apiRequest(input, secondary));
+      if (action === 'time-zone') setOutput(timeZoneConverter(input, secondary));
+      if (action === 'age-calc') setOutput(ageCalculator(input));
+      if (action === 'countdown') setOutput(countdown(input));
+      if (action === 'cron-generate') setOutput(cronGenerator(input));
+      if (action === 'cron-read') setOutput(cronReader(input));
+      if (action === 'duration-calc') setOutput(durationCalculator(input));
+      if (action === 'world-clock') setOutput(worldClock(secondary));
       if (action === 'generic-analyze') setOutput(analyzeGenericInput(input, tool.name));
       if (action === 'css-generate') setOutput(generateCss(input, secondary, tool.name));
       if (action === 'seo-generate') setOutput(lower.includes('slug') ? toSlug(input) : generateSeo(input, secondary, tool.name));
@@ -684,15 +872,8 @@ export default function UniversalTool() {
       if (action === 'meta') {
         setOutput(`<title>${input || 'Page title'}</title>\n<meta name="description" content="${secondary || 'Page description'}">\n<meta property="og:title" content="${input || 'Page title'}">`);
       }
-      if (action === 'date-diff') {
-        const [start, end] = input.split(/\s+/);
-        const days = Math.abs(new Date(end) - new Date(start)) / 86400000;
-        setOutput(`${days || 0} days`);
-      }
-      if (action === 'timestamp') {
-        const now = new Date();
-        setOutput(`${now.getTime()}\n${now.toISOString()}`);
-      }
+      if (action === 'date-diff') setOutput(dateDifference(input, secondary));
+      if (action === 'timestamp') setOutput(timestampTool(input));
       if (action === 'stats') {
         const nums = input.split(/[,\s]+/).map(Number).filter((num) => !Number.isNaN(num)).sort((a, b) => a - b);
         const sum = nums.reduce((total, num) => total + num, 0);
@@ -769,12 +950,14 @@ export default function UniversalTool() {
             spellCheck={false}
             className="h-72 w-full resize-none rounded-lg border border-gray-200 bg-gray-50 p-4 font-mono text-sm text-gray-800 outline-none transition focus:border-webpeaker-500 focus:bg-white focus:ring-4 focus:ring-webpeaker-100"
           />
-          <input
-            value={secondary}
-            onChange={(event) => setSecondary(event.target.value)}
-            placeholder={secondaryPlaceholder}
-            className="mt-3 w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-webpeaker-500 focus:ring-4 focus:ring-webpeaker-100"
-          />
+          {hasSecondaryInput && (
+            <input
+              value={secondary}
+              onChange={(event) => setSecondary(event.target.value)}
+              placeholder={secondaryPlaceholder}
+              className="mt-3 w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-webpeaker-500 focus:ring-4 focus:ring-webpeaker-100"
+            />
+          )}
           <div className="mt-4 flex flex-wrap gap-2">
             {toolActions.map((item) => (
               <ToolButton key={item.action} onClick={() => run(item.action)} tone={item.tone}>

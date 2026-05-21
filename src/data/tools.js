@@ -304,6 +304,16 @@ const toolDescriptions = {
   'html-encode-decode': 'Escape HTML entities or decode escaped HTML text.',
   'binary-text': 'Convert text to binary bytes and binary bytes back to text.',
   'ascii-converter': 'Convert text to ASCII codes or ASCII numbers back to text.',
+  'time-zone-converter': 'Convert one date and time across selected time zones.',
+  'age-calculator': 'Calculate age from a birth date in years, months, days, and total days.',
+  'date-difference': 'Find the exact duration between two dates or times.',
+  'timestamp-converter': 'Convert Unix timestamps to dates or dates to timestamps.',
+  'countdown-timer': 'Calculate remaining time until a future date and time.',
+  'cron-expression-generator': 'Generate common cron expressions from simple descriptions.',
+  'cron-expression-reader': 'Explain each part of a five-field cron expression.',
+  'timestamp-generator': 'Generate the current timestamp in seconds, milliseconds, ISO, and local time.',
+  'time-duration-calculator': 'Convert duration text like 2h 30m into seconds, minutes, and hours.',
+  'world-clock-tool': 'Show the current time in multiple world time zones.',
 };
 
 export const allTools = Object.entries(groups).flatMap(([categoryId, names]) =>
