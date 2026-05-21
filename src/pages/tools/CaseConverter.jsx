@@ -1,15 +1,27 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { Clipboard, Trash2 } from 'lucide-react';
+
+const toSlug = (text) =>
+  text.trim().toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+const toTitle = (text) => text.toLowerCase().replace(/\b[\p{L}\p{N}]/gu, (char) => char.toUpperCase());
+const toSentence = (text) => text.toLowerCase().replace(/(^\s*[\p{L}\p{N}]|[.!?]\s*[\p{L}\p{N}])/gu, (char) => char.toUpperCase());
+const toCamel = (text) => toSlug(text).replace(/-([a-z0-9])/g, (_, char) => char.toUpperCase());
+const toPascal = (text) => {
+  const camel = toCamel(text);
+  return camel ? camel[0].toUpperCase() + camel.slice(1) : '';
+};
 
 const cases = [
-  { id: 'upper', label: 'UPPER CASE', fn: (t) => t.toUpperCase() },
-  { id: 'lower', label: 'lower case', fn: (t) => t.toLowerCase() },
-  { id: 'title', label: 'Title Case', fn: (t) => t.replace(/\w\S*/g, (w) => w[0].toUpperCase() + w.slice(1).toLowerCase()) },
-  { id: 'sentence', label: 'Sentence case', fn: (t) => t.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase()) },
-  { id: 'camel', label: 'camelCase', fn: (t) => t.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase()) },
-  { id: 'pascal', label: 'PascalCase', fn: (t) => t.replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, (c) => c.toUpperCase()) },
-  { id: 'snake', label: 'snake_case', fn: (t) => t.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_') },
-  { id: 'kebab', label: 'kebab-case', fn: (t) => t.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') },
-  { id: 'constant', label: 'CONSTANT_CASE', fn: (t) => t.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_') },
+  { id: 'upper', label: 'UPPER CASE', fn: (text) => text.toUpperCase() },
+  { id: 'lower', label: 'lower case', fn: (text) => text.toLowerCase() },
+  { id: 'title', label: 'Title Case', fn: toTitle },
+  { id: 'sentence', label: 'Sentence case', fn: toSentence },
+  { id: 'camel', label: 'camelCase', fn: toCamel },
+  { id: 'pascal', label: 'PascalCase', fn: toPascal },
+  { id: 'snake', label: 'snake_case', fn: (text) => toSlug(text).replace(/-/g, '_') },
+  { id: 'kebab', label: 'kebab-case', fn: toSlug },
+  { id: 'constant', label: 'CONSTANT_CASE', fn: (text) => toSlug(text).replace(/-/g, '_').toUpperCase() },
 ];
 
 function Toast({ msg, onDone }) {
@@ -21,43 +33,44 @@ export default function CaseConverter() {
   const [active, setActive] = useState('upper');
   const [toast, setToast] = useState('');
 
-  const selected = cases.find((c) => c.id === active);
-  const output = input ? selected.fn(input) : '';
+  const selected = cases.find((item) => item.id === active) || cases[0];
+  const output = useMemo(() => (input ? selected.fn(input) : ''), [input, selected]);
 
-  const copy = () => {
-    if (!output) return;
-    navigator.clipboard.writeText(output);
-    setToast('Copied!');
+  const copy = async () => {
+    await navigator.clipboard.writeText(output);
+    setToast('Copied to clipboard.');
   };
 
   return (
     <div className="tool-page">
       <div className="tool-page-header">
-        <h1><span className="icon">🔡</span> Case Converter</h1>
-        <p>Convert text to any case format instantly.</p>
+        <h1>Case Converter</h1>
+        <p>Convert text to common writing and code case formats instantly.</p>
       </div>
 
       <div className="tool-grid" style={{ gap: 20 }}>
         <textarea
           id="case-input"
           className="input"
-          placeholder="Type or paste your text here…"
+          style={{ minHeight: 180 }}
+          placeholder="Type or paste your text here..."
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(event) => setInput(event.target.value)}
           aria-label="Input text"
         />
 
         <div>
-          <span className="label">Select Case Format</span>
+          <span className="label">Case Format</span>
           <div className="toggle-group">
-            {cases.map((c) => (
+            {cases.map((item) => (
               <button
-                key={c.id}
-                className={`toggle-btn ${active === c.id ? 'active' : ''}`}
-                onClick={() => setActive(c.id)}
-                aria-pressed={active === c.id}
+                key={item.id}
+                type="button"
+                className={`toggle-btn ${active === item.id ? 'active' : ''}`}
+                onClick={() => setActive(item.id)}
+                aria-pressed={active === item.id}
               >
-                {c.label}
+                {item.label}
               </button>
             ))}
           </div>
@@ -65,15 +78,17 @@ export default function CaseConverter() {
 
         <div>
           <span className="label">Result</span>
-          <div id="case-output" className="result-box" aria-live="polite">{output || <span style={{ color: 'var(--text-muted)' }}>Output will appear here…</span>}</div>
+          <div id="case-output" className="result-box" aria-live="polite">
+            {output || <span style={{ color: 'var(--text-muted)' }}>Output will appear here...</span>}
+          </div>
         </div>
 
         <div className="copy-btn-row">
           <button className="btn btn-primary" onClick={copy} disabled={!output}>
-            📋 Copy Result
+            <Clipboard size={16} /> Copy Result
           </button>
           <button className="btn btn-danger" onClick={() => setInput('')} disabled={!input}>
-            🗑️ Clear
+            <Trash2 size={16} /> Clear
           </button>
         </div>
       </div>

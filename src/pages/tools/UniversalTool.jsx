@@ -689,7 +689,10 @@ export default function UniversalTool() {
         const days = Math.abs(new Date(end) - new Date(start)) / 86400000;
         setOutput(`${days || 0} days`);
       }
-      if (action === 'timestamp') setOutput(`${Date.now()}\n${new Date().toISOString()}`);
+      if (action === 'timestamp') {
+        const now = new Date();
+        setOutput(`${now.getTime()}\n${now.toISOString()}`);
+      }
       if (action === 'stats') {
         const nums = input.split(/[,\s]+/).map(Number).filter((num) => !Number.isNaN(num)).sort((a, b) => a - b);
         const sum = nums.reduce((total, num) => total + num, 0);

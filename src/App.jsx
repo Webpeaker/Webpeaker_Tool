@@ -15,6 +15,7 @@ import Base64Tool from './pages/tools/Base64Tool';
 import UrlEncoder from './pages/tools/UrlEncoder';
 import WordCounter from './pages/tools/WordCounter';
 import UniversalTool from './pages/tools/UniversalTool';
+import { categoryToolRoutes } from './pages/tools/categoryToolRoutes';
 
 export default function App() {
   return (
@@ -39,6 +40,9 @@ export default function App() {
           <Route path="tools/url-encode-decode" element={<UrlEncoder />} />
           <Route path="tools/word-counter" element={<WordCounter />} />
           <Route path="tools/word-character-counter" element={<WordCounter />} />
+          {categoryToolRoutes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
           <Route path="tools/:slug" element={<UniversalTool />} />
         </Route>
       </Routes>
