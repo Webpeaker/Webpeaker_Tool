@@ -64,6 +64,7 @@ const groups = {
   text: [
     'Word / Character Counter',
     'Case Converter',
+    'Text Formatter',
     'Remove Spaces / Duplicates',
     'Text Sorter',
     'Find & Replace',
@@ -129,6 +130,7 @@ const groups = {
   pdf: ['Merge / Split PDF', 'Compress PDF', 'PDF <-> Image', 'Rotate PDF', 'PDF Watermark Tool', 'PDF Metadata Editor', 'PDF Page Number Adder'],
   color: [
     'Color Picker',
+    'Text Designer',
     'HEX <-> RGB',
     'Gradient Generator',
     'Palette Generator',
@@ -199,15 +201,24 @@ const groups = {
   network: ['IP Lookup', 'DNS Lookup', 'Whois Checker', 'Port Checker', 'Ping Tool', 'IP Range Calculator', 'Subnet Calculator', 'DNS Propagation Checker', 'SSL Certificate Viewer', 'SSL Expiry Checker', 'Port Scanner Web-based'],
   api: ['API Request Tester', 'JSON Viewer', 'Response Formatter', 'Header Editor', 'API Mock Response Generator', 'REST Endpoint Tester', 'Webhook Payload Generator', 'Rate Limit Tester'],
   url: ['URL Parser', 'URL Validator', 'Query Builder', 'URL Shortener', 'URL Parameter Extractor', 'UTM Campaign Builder'],
-  content: ['Grammar Checker', 'Text Summarizer', 'Keyword Extractor', 'Privacy Policy Generator', 'Cookie Policy Generator', 'Email Signature Generator'],
+  content: ['Lorem Ipsum Generator', 'Grammar Checker', 'Text Summarizer', 'Keyword Extractor', 'Privacy Policy Generator', 'Cookie Policy Generator', 'Email Signature Generator'],
   ai: ['OCR Image to Text', 'Language Detection', 'Text Improver'],
   media: ['Text to Speech Converter', 'Speech to Text Converter', 'Audio Volume Booster', 'Audio Noise Reducer', 'Video to GIF Converter', 'GIF Frame Extractor', 'Video Metadata Viewer', 'Subtitle Editor SRT', 'Video Frame Extractor', 'GIF Loop Controller', 'Audio Format Detector', 'Audio Metadata Editor', 'Subtitle Timing Sync Tool'],
   qr: ['QR Code Customizer', 'QR Code Scanner', 'Barcode Scanner', 'Barcode Label Generator'],
 };
 
 const implementedPaths = {
+  'word-character-counter': '/tools/word-counter',
+  'case-converter': '/tools/case-converter',
+  'text-formatter': '/tools/text-formatter',
   calculator: '/tools/calculator',
   'unit-converter': '/tools/unit-converter',
+  'base64-encode-decode': '/tools/base64',
+  'url-encode-decode': '/tools/url-encoder',
+  'password-generator': '/tools/password-generator',
+  'color-picker': '/tools/color-picker',
+  'text-designer': '/tools/text-designer',
+  'lorem-ipsum-generator': '/tools/lorem-ipsum-generator',
   'qr-code-customizer': '/tools/qr-generator',
   'json-formatter-and-validator': '/tools/json-formatter',
 };
@@ -263,7 +274,7 @@ export const allTools = Object.entries(groups).flatMap(([categoryId, names]) =>
       color: meta.color,
       bg: meta.bg,
       description: descriptions[categoryId],
-      isPopular: ['word-character-counter', 'json-formatter-and-validator', 'password-generator', 'qr-code-customizer', 'base64-encode-decode', 'color-picker', 'url-parser', 'calculator'].includes(id),
+      isPopular: ['word-character-counter', 'json-formatter-and-validator', 'password-generator', 'qr-code-customizer', 'base64-encode-decode', 'color-picker', 'text-formatter', 'calculator'].includes(id),
     };
   }),
 );

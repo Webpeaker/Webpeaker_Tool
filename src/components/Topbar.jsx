@@ -23,8 +23,16 @@ export default function Topbar({ isDarkMode, onOpenSidebar, onToggleDarkMode }) 
     if (matches[0]) {
       navigate(matches[0].path);
       setQuery('');
+      setIsFocused(false);
       inputRef.current?.blur();
     }
+  };
+
+  const openTool = (path) => {
+    navigate(path);
+    setQuery('');
+    setIsFocused(false);
+    inputRef.current?.blur();
   };
 
   return (
@@ -67,17 +75,18 @@ export default function Topbar({ isDarkMode, onOpenSidebar, onToggleDarkMode }) 
           className="w-full border-none bg-transparent text-sm text-gray-700 outline-none placeholder-gray-400 dark:text-gray-100"
         />
         {isFocused && query.trim() && (
-          <div className="absolute left-0 right-0 top-[calc(100%+10px)] overflow-hidden rounded-lg border border-gray-100 bg-white py-2 shadow-xl shadow-gray-200/70 dark:border-gray-800 dark:bg-gray-900 dark:shadow-black/30">
+          <div className="absolute left-0 right-0 top-[calc(100%+10px)] z-50 overflow-hidden rounded-lg border border-gray-100 bg-white py-2 shadow-xl shadow-gray-200/70 dark:border-gray-800 dark:bg-gray-900 dark:shadow-black/30">
             {matches.length > 0 ? (
               matches.map((tool) => {
                 const Icon = tool.icon;
 
                 return (
-                  <Link
+                  <button
                     key={`${tool.categoryId}-${tool.id}`}
-                    to={tool.path}
-                    onClick={() => setQuery('')}
-                    className="flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-webpeaker-50 dark:hover:bg-gray-800"
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => openTool(tool.path)}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-webpeaker-50 dark:hover:bg-gray-800"
                   >
                     <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${tool.bg} ${tool.color}`}>
                       <Icon size={18} />
@@ -86,7 +95,7 @@ export default function Topbar({ isDarkMode, onOpenSidebar, onToggleDarkMode }) 
                       <span className="block truncate text-sm font-bold text-gray-900 dark:text-gray-100">{tool.name}</span>
                       <span className="block truncate text-xs font-medium text-gray-400">{tool.category}</span>
                     </span>
-                  </Link>
+                  </button>
                 );
               })
             ) : (
@@ -104,7 +113,7 @@ export default function Topbar({ isDarkMode, onOpenSidebar, onToggleDarkMode }) 
         <button className="flex items-center gap-2 rounded-lg border-0 bg-transparent p-0 transition-colors hover:text-webpeaker-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-webpeaker-500 dark:hover:text-webpeaker-100" type="button">
           <Heart size={18} /> Favorites
         </button>
-        <button className="flex items-center gap-2 rounded-lg border-0 bg-[#6832e3] px-5 py-2.5 text-white shadow-lg shadow-webpeaker-100 transition-colors hover:bg-webpeaker-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-webpeaker-500 dark:shadow-none" type="button">
+        <button className="flex items-center gap-2 rounded-lg border-0 bg-[#6832e3] px-5 py-2.5 text-white shadow-lg shadow-webpeaker-100 transition-colors hover:bg-webpeaker-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-webpeaker-500 dark:shadow-none" type="button" onClick={() => navigate('/')}>
           <Grid size={18} /> <span>Explore All Tools</span>
         </button>
       </div>

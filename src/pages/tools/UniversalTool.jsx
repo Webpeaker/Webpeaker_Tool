@@ -151,6 +151,73 @@ const ToolButton = ({ children, onClick, disabled, tone = 'primary', icon: Icon 
   );
 };
 
+const getToolActions = (tool, lower) => {
+  const id = tool.id;
+  const actions = [];
+  const add = (action, label, tone = actions.length ? 'soft' : 'primary') => {
+    actions.push({ action, label, tone });
+  };
+
+  if (id.includes('slug')) add('slug', 'Generate Slug');
+  if (lower.includes('meta tag') || lower.includes('open graph') || lower.includes('twitter card')) add('meta', 'Generate Meta Tags');
+  if (lower.includes('case')) {
+    add('upper', 'Uppercase');
+    add('lower', 'Lowercase', 'soft');
+    add('title', 'Title Case', 'soft');
+    add('camel', 'camelCase', 'soft');
+    add('pascal', 'PascalCase', 'soft');
+  }
+  if (lower.includes('space')) add('trim', 'Clean Spaces');
+  if (lower.includes('duplicate')) add('dedupe', 'Remove Duplicates');
+  if (lower.includes('sort')) add('sort', 'Sort Lines');
+  if (lower.includes('reverse')) add('reverse', 'Reverse Text');
+  if (lower.includes('find') || lower.includes('replace')) add('find', 'Find Replace');
+  if (lower.includes('json') && !lower.includes('csv')) {
+    add('json-format', 'Format JSON');
+    add('json-minify', 'Minify JSON', 'soft');
+  }
+  if (lower.includes('csv') || lower.includes('data to graph')) {
+    add('json-csv', 'JSON to CSV');
+    add('csv-json', 'CSV to JSON', 'soft');
+  }
+  if (lower.includes('base64')) {
+    add('base64-encode', 'Base64 Encode');
+    add('base64-decode', 'Base64 Decode', 'soft');
+  }
+  if (lower.includes('url encode')) {
+    add('url-encode', 'URL Encode');
+    add('url-decode', 'URL Decode', 'soft');
+  }
+  if (lower.includes('html encode')) {
+    add('html-encode', 'HTML Encode');
+    add('html-decode', 'HTML Decode', 'soft');
+  }
+  if (lower.includes('binary') || lower.includes('ascii')) {
+    add('binary', 'Text to Binary');
+    add('text', 'Binary to Text', 'soft');
+  }
+  if (lower.includes('uuid')) add('uuid', 'Generate UUIDs');
+  if (lower.includes('password')) {
+    add('password', 'Generate Password');
+    add('strength', 'Check Strength', 'soft');
+  }
+  if (lower.includes('hash') || lower.includes('checksum')) add('hash', 'Generate SHA-256');
+  if (lower.includes('jwt')) add('jwt', 'Decode JWT');
+  if (lower.includes('fake data')) add('fake', 'Generate Fake Data');
+  if (lower.includes('hex')) add('hex', 'Random Hex');
+  if (lower.includes('gradient')) add('gradient', 'Gradient CSS');
+  if (lower.includes('shadow')) add('shadow', 'Shadow CSS');
+  if (lower.includes('flexbox')) add('flex', 'Flexbox CSS');
+  if (lower.includes('grid')) add('grid', 'Grid CSS');
+  if (lower.includes('url parser') || lower.includes('query') || lower.includes('utm')) add('url-parse', 'Parse URL');
+  if (lower.includes('timestamp')) add('timestamp', 'Timestamp');
+  if (lower.includes('date difference')) add('date-diff', 'Date Difference');
+  if (lower.includes('statistics') || lower.includes('mean')) add('stats', 'Calculate Stats');
+  if (tool.categoryId === 'qr') add('qr-note', 'QR Workflow');
+
+  return actions.length ? actions : [{ action: 'trim', label: 'Clean Input', tone: 'primary' }];
+};
+
 export default function UniversalTool() {
   const { slug } = useParams();
   const tool = useMemo(() => allTools.find((item) => item.id === slug), [slug]);
@@ -175,15 +242,8 @@ export default function UniversalTool() {
   }
 
   const lower = tool.name.toLowerCase();
-  const isText = tool.categoryId === 'text' || tool.categoryId === 'content' || tool.categoryId === 'seo';
-  const isCode = tool.categoryId === 'developer' || tool.categoryId === 'data' || tool.categoryId === 'api';
-  const isEncoding = tool.categoryId === 'encoding' || lower.includes('unicode');
-  const isSecurity = tool.categoryId === 'security' || tool.categoryId === 'random';
   const isVisual = ['image', 'pdf', 'file', 'media', 'qr'].includes(tool.categoryId);
-  const isColor = tool.categoryId === 'color' || tool.categoryId === 'css';
-  const isUrl = tool.categoryId === 'url' || tool.categoryId === 'web' || tool.categoryId === 'network';
-  const isTime = tool.categoryId === 'time';
-  const isMath = tool.categoryId === 'math';
+  const toolActions = getToolActions(tool, lower);
 
   const run = async (action) => {
     setNotice('');
@@ -336,78 +396,11 @@ export default function UniversalTool() {
             className="mt-3 w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-webpeaker-500 focus:ring-4 focus:ring-webpeaker-100"
           />
           <div className="mt-4 flex flex-wrap gap-2">
-            {isText && (
-              <>
-                <ToolButton onClick={() => run('upper')}>Uppercase</ToolButton>
-                <ToolButton onClick={() => run('lower')} tone="soft">Lowercase</ToolButton>
-                <ToolButton onClick={() => run('title')} tone="soft">Title Case</ToolButton>
-                <ToolButton onClick={() => run('trim')} tone="soft">Clean Spaces</ToolButton>
-                <ToolButton onClick={() => run('dedupe')} tone="soft">Remove Duplicates</ToolButton>
-                <ToolButton onClick={() => run('sort')} tone="soft">Sort Lines</ToolButton>
-                <ToolButton onClick={() => run('reverse')} tone="soft">Reverse</ToolButton>
-                <ToolButton onClick={() => run('find')} tone="soft">Find Replace</ToolButton>
-                <ToolButton onClick={() => run('slug')} tone="soft">Slug</ToolButton>
-                <ToolButton onClick={() => run('meta')} tone="soft">Meta Tags</ToolButton>
-              </>
-            )}
-            {isCode && (
-              <>
-                <ToolButton onClick={() => run('json-format')}>Format JSON</ToolButton>
-                <ToolButton onClick={() => run('json-minify')} tone="soft">Minify JSON</ToolButton>
-                <ToolButton onClick={() => run('json-csv')} tone="soft">JSON to CSV</ToolButton>
-                <ToolButton onClick={() => run('csv-json')} tone="soft">CSV to JSON</ToolButton>
-                <ToolButton onClick={() => run('uuid')} tone="soft">Generate UUIDs</ToolButton>
-              </>
-            )}
-            {isEncoding && (
-              <>
-                <ToolButton onClick={() => run('base64-encode')}>Base64 Encode</ToolButton>
-                <ToolButton onClick={() => run('base64-decode')} tone="soft">Base64 Decode</ToolButton>
-                <ToolButton onClick={() => run('url-encode')} tone="soft">URL Encode</ToolButton>
-                <ToolButton onClick={() => run('url-decode')} tone="soft">URL Decode</ToolButton>
-                <ToolButton onClick={() => run('html-encode')} tone="soft">HTML Encode</ToolButton>
-                <ToolButton onClick={() => run('html-decode')} tone="soft">HTML Decode</ToolButton>
-                <ToolButton onClick={() => run('binary')} tone="soft">Text to Binary</ToolButton>
-                <ToolButton onClick={() => run('text')} tone="soft">Binary to Text</ToolButton>
-              </>
-            )}
-            {isSecurity && (
-              <>
-                <ToolButton onClick={() => run('password')}>Password</ToolButton>
-                <ToolButton onClick={() => run('strength')} tone="soft">Strength</ToolButton>
-                <ToolButton onClick={() => run('hash')} tone="soft">SHA-256</ToolButton>
-                <ToolButton onClick={() => run('jwt')} tone="soft">Decode JWT</ToolButton>
-                <ToolButton onClick={() => run('uuid')} tone="soft">UUID Bulk</ToolButton>
-                <ToolButton onClick={() => run('hex')} tone="soft">Random Hex</ToolButton>
-                <ToolButton onClick={() => run('fake')} tone="soft">Fake Data</ToolButton>
-              </>
-            )}
-            {isColor && (
-              <>
-                <ToolButton onClick={() => run('gradient')}>Gradient CSS</ToolButton>
-                <ToolButton onClick={() => run('shadow')} tone="soft">Shadow CSS</ToolButton>
-                <ToolButton onClick={() => run('flex')} tone="soft">Flexbox</ToolButton>
-                <ToolButton onClick={() => run('grid')} tone="soft">Grid</ToolButton>
-              </>
-            )}
-            {isUrl && (
-              <>
-                <ToolButton onClick={() => run('url-parse')}>Parse URL</ToolButton>
-                <ToolButton onClick={() => run('slug')} tone="soft">Make Slug</ToolButton>
-              </>
-            )}
-            {isTime && (
-              <>
-                <ToolButton onClick={() => run('timestamp')}>Timestamp</ToolButton>
-                <ToolButton onClick={() => run('date-diff')} tone="soft">Date Diff</ToolButton>
-              </>
-            )}
-            {isMath && (
-              <>
-                <ToolButton onClick={() => run('stats')}>Statistics</ToolButton>
-                <ToolButton onClick={() => run('json-format')} tone="soft">Format Values</ToolButton>
-              </>
-            )}
+            {toolActions.map((item) => (
+              <ToolButton key={item.action} onClick={() => run(item.action)} tone={item.tone}>
+                {item.label}
+              </ToolButton>
+            ))}
             <ToolButton onClick={() => run('copy')} tone="soft" icon={Copy}>Copy</ToolButton>
             <ToolButton onClick={() => run('clear')} tone="danger" icon={Trash2}>Clear</ToolButton>
           </div>
