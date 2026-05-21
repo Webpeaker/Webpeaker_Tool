@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Search, TrendingUp } from 'lucide-react';
 import { categories, tools } from '../data/tools';
 import ToolCard from '../components/ToolCard';
@@ -38,7 +38,33 @@ function HeroArt() {
 
 export default function Home() {
   const [query, setQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const allToolsRef = useRef(null);
+  const categoryParam = searchParams.get('category');
+  const activeCategory = categories.some((cat) => cat.id === categoryParam) ? categoryParam : 'all';
+
+  const scrollToAllTools = () => {
+    window.setTimeout(() => {
+      allToolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0);
+  };
+
+  const showAllTools = () => {
+    setQuery('');
+    setSearchParams({});
+    scrollToAllTools();
+  };
+
+  const selectCategory = (categoryId) => {
+    setSearchParams(categoryId === activeCategory ? {} : { category: categoryId });
+    scrollToAllTools();
+  };
+
+  useEffect(() => {
+    if (activeCategory !== 'all') {
+      scrollToAllTools();
+    }
+  }, [activeCategory]);
 
   const filteredTools = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -100,10 +126,7 @@ export default function Home() {
           </h2>
           <button
             type="button"
-            onClick={() => {
-              setQuery('');
-              setActiveCategory('all');
-            }}
+            onClick={showAllTools}
             className="w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 transition hover:border-webpeaker-200 hover:text-webpeaker-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 sm:w-auto"
           >
             View all
@@ -127,7 +150,7 @@ export default function Home() {
               <button
                 key={cat.id}
                 type="button"
-                onClick={() => setActiveCategory(isActive ? 'all' : cat.id)}
+                onClick={() => selectCategory(cat.id)}
                 className={`flex min-w-0 items-center gap-4 rounded-lg border bg-white p-4 text-left shadow-[0_8px_30px_rgba(17,24,39,0.03)] transition dark:bg-gray-900 dark:shadow-none ${
                   isActive ? 'border-webpeaker-500 ring-4 ring-webpeaker-100 dark:ring-webpeaker-900/40' : 'border-gray-100 hover:border-webpeaker-100 dark:border-gray-800 dark:hover:border-webpeaker-900'
                 }`}
@@ -145,7 +168,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section>
+      <section ref={allToolsRef} className="scroll-mt-36 lg:scroll-mt-24">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
             <h2 className="text-lg font-black text-gray-950 dark:text-white sm:text-xl">All Utility Tools</h2>
@@ -156,10 +179,7 @@ export default function Home() {
           {(query || activeCategory !== 'all') && (
             <button
               type="button"
-              onClick={() => {
-                setQuery('');
-                setActiveCategory('all');
-              }}
+              onClick={showAllTools}
               className="w-full rounded-lg bg-white px-4 py-2 text-sm font-bold text-gray-500 shadow-sm hover:text-webpeaker-600 dark:bg-gray-900 dark:text-gray-300 dark:shadow-none sm:w-auto"
             >
               Clear filters

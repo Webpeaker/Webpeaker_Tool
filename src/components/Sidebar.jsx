@@ -4,6 +4,7 @@ import { categories } from '../data/tools';
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
+  const activeCategory = new URLSearchParams(location.search).get('category');
   const closeOnMobile = () => {
     if (window.innerWidth < 1024) onClose();
   };
@@ -43,7 +44,7 @@ export default function Sidebar({ isOpen, onClose }) {
           to="/" 
           onClick={closeOnMobile}
           className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold transition-colors ${
-            location.pathname === '/' ? 'bg-webpeaker-50 text-webpeaker-600 dark:bg-webpeaker-900/35 dark:text-webpeaker-100' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-950 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white'
+            location.pathname === '/' && !activeCategory ? 'bg-webpeaker-50 text-webpeaker-600 dark:bg-webpeaker-900/35 dark:text-webpeaker-100' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-950 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white'
           }`}
         >
           <Home size={20} />
@@ -57,10 +58,17 @@ export default function Sidebar({ isOpen, onClose }) {
         <ul className="space-y-1">
           {categories.slice(0, 16).map((cat) => {
             const CatIcon = cat.icon; 
+            const isActive = activeCategory === cat.id;
 
             return (
               <li key={cat.id}>
-                <Link to="/" onClick={closeOnMobile} className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-50 hover:text-webpeaker-600 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-webpeaker-100">
+                <Link
+                  to={`/?category=${cat.id}`}
+                  onClick={closeOnMobile}
+                  className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors ${
+                    isActive ? 'bg-webpeaker-50 text-webpeaker-600 dark:bg-webpeaker-900/35 dark:text-webpeaker-100' : 'text-gray-600 hover:bg-gray-50 hover:text-webpeaker-600 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-webpeaker-100'
+                  }`}
+                >
                   {CatIcon && <CatIcon size={18} strokeWidth={1.8} />}
                   {cat.name}
                 </Link>
