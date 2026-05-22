@@ -201,7 +201,7 @@ const groups = {
   network: ['IP Lookup', 'DNS Lookup', 'Whois Checker', 'Port Checker', 'Ping Tool', 'IP Range Calculator', 'Subnet Calculator', 'DNS Propagation Checker', 'SSL Certificate Viewer', 'SSL Expiry Checker', 'Port Scanner Web-based'],
   api: ['API Request Tester', 'JSON Viewer', 'Response Formatter', 'Header Editor', 'API Mock Response Generator', 'REST Endpoint Tester', 'Webhook Payload Generator', 'Rate Limit Tester'],
   url: ['URL Parser', 'URL Validator', 'Query Builder', 'URL Shortener', 'URL Parameter Extractor', 'UTM Campaign Builder'],
-  content: ['Lorem Ipsum Generator', 'Grammar Checker', 'Text Summarizer', 'Keyword Extractor', 'Privacy Policy Generator', 'Cookie Policy Generator', 'Email Signature Generator'],
+  content: ['Lorem Ipsum Generator', 'Grammar Checker', 'Text Summarizer', 'Keyword Extractor', 'Privacy Policy Generator', 'Cookie Policy Generator', 'Email Signature Generator', 'Final Utility Toolkit'],
   ai: ['OCR Image to Text', 'Language Detection', 'Text Improver'],
   media: ['Text to Speech Converter', 'Speech to Text Converter', 'Audio Volume Booster', 'Audio Noise Reducer', 'Video to GIF Converter', 'GIF Frame Extractor', 'Video Metadata Viewer', 'Subtitle Editor SRT', 'Video Frame Extractor', 'GIF Loop Controller', 'Audio Format Detector', 'Audio Metadata Editor', 'Subtitle Timing Sync Tool'],
   qr: ['QR Code Customizer', 'QR Code Scanner', 'Barcode Scanner', 'Barcode Label Generator'],
@@ -314,6 +314,7 @@ const toolDescriptions = {
   'timestamp-generator': 'Generate the current timestamp in seconds, milliseconds, ISO, and local time.',
   'time-duration-calculator': 'Convert duration text like 2h 30m into seconds, minutes, and hours.',
   'world-clock-tool': 'Show the current time in multiple world time zones.',
+  'final-utility-toolkit': 'A general-purpose utility workspace for quick text, data, and browser-side checks.',
 };
 
 export const allTools = Object.entries(groups).flatMap(([categoryId, names]) =>
