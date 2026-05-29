@@ -1,25 +1,13 @@
 ﻿# Webpeaker Tool Repository
 
-This repository contains two projects in a single monorepo:
-
-- `app/` — Android `GeotaggingCamera` application
-- `website/` — Webpeaker website (React + Vite)
+This repository contains the Webpeaker website project.
 
 ## Structure
 
-- `app/` contains the Android Gradle app source.
 - `website/` contains the website source and front-end configuration.
 
 ## How to use
 
-### Android app
-Open `app/` in Android Studio or run the Gradle commands from the root:
-
-```bash
-./gradlew :app:assembleDebug
-```
-
-### Website
 From the `website/` folder:
 
 ```bash
@@ -30,4 +18,4 @@ npm run dev
 
 ## Notes
 
-The website files are intentionally kept under the `web/` folder to keep the Android app separate and avoid root-level file conflicts.
+The Android `GeotaggingCamera` app has been removed from this repository.
