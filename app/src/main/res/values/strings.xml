@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">GeoProof Camera</string>
+    <string name="app_tagline">Proof. Location. Trust.</string>
+
+    <!-- Camera screen -->
+    <string name="searching_gps">Searching GPS…</string>
+    <string name="gps_accuracy">GPS ±%1$sm</string>
+    <string name="capture_photo">Capture geotagged photo</string>
+    <string name="flip_camera">Flip camera</string>
+    <string name="open_gallery">Open gallery</string>
+    <string name="open_settings">Settings</string>
+
+    <!-- Gallery -->
+    <string name="gallery_title">My GeoPhotos</string>
+    <string name="no_photos_title">No Photos Yet</string>
+    <string name="no_photos_msg">Take your first geotagged photo!</string>
+    <string name="delete_photo">Delete Photo</string>
+    <string name="delete_confirm">Delete this photo permanently?</string>
+    <string name="delete_yes">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="photos_count">%1$d photos</string>
+
+    <!-- Viewer -->
+    <string name="share_via">Share via…</string>
+    <string name="share_whatsapp">Share to WhatsApp</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="section_overlay">Photo Overlay Fields</string>
+    <string name="section_format">Date &amp; Time Format</string>
+    <string name="section_logo">Company Logo</string>
+    <string name="section_weather">Weather Info</string>
+    <string name="section_map">Map Tile</string>
+    <string name="show_coordinates">Show Coordinates (Lat/Long)</string>
+    <string name="show_address">Show Full Address</string>
+    <string name="show_date">Show Date</string>
+    <string name="show_time">Show Time</string>
+    <string name="show_weather">Show Weather</string>
+    <string name="show_logo">Show Company Logo</string>
+    <string name="show_map_tile">Show Satellite Map Tile</string>
+    <string name="date_format_label">Date Format</string>
+    <string name="time_format_label">Time Format</string>
+    <string name="logo_pick">Tap to select logo from gallery</string>
+    <string name="logo_remove">Remove Logo</string>
+    <string name="weather_api_hint">OpenWeatherMap API Key</string>
+    <string name="weather_api_help">Get free key at openweathermap.org</string>
+    <string name="logo_change">Change Logo</string>
+    <string name="no_logo">No logo selected</string>
+</resources>

@@ -1,13 +1,362 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>webpeaker</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoProof Camera — Smart GPS Geotagging & Verification</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header class="header">
+        <div class="container navbar">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="url(#logo-grad)" stroke="#00C853" stroke-width="4"/>
+                    <polygon points="40,30 70,50 40,70" fill="#FFFFFF"/>
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#1565C0"/>
+                            <stop offset="100%" stop-color="#0A1628"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>GeoProof Camera</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#simulator">Interactive Demo</a>
+                <a href="#architecture">How It Works</a>
+                <a href="https://github.com" class="btn btn-nav" id="btn-github">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg-gradients">
+            <div class="gradient-blob blob-1"></div>
+            <div class="gradient-blob blob-2"></div>
+        </div>
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="badge-pill">
+                    <span class="dot green-dot"></span>
+                    <span>Android App Ready</span>
+                </div>
+                <h1>Smart GPS Camera For <span>Verified Geotagging</span></h1>
+                <p>Stamp high-resolution satellite map tiles, precise latitude/longitude, altitude, live weather conditions, and ticking date-time stamps directly onto your photos. Fast, local, and permanently branded.</p>
+                
+                <div class="hero-actions">
+                    <a href="#download" class="btn btn-primary">
+                        <i data-lucide="download"></i>
+                        <span>Download APK</span>
+                    </a>
+                    <a href="#simulator" class="btn btn-secondary">
+                        <i data-lucide="play"></i>
+                        <span>Try Simulator</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Phone Live View Mockup -->
+            <div class="hero-mockup-wrapper">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <!-- Top status bar -->
+                        <div class="screen-top-bar">
+                            <div class="gps-lock-badge">
+                                <span class="dot blink-dot"></span>
+                                <span>GPS Locked (±3m)</span>
+                            </div>
+                            <div class="top-controls">
+                                <div class="icon-btn"><i data-lucide="zap" class="amber-tint"></i></div>
+                                <div class="icon-btn"><i data-lucide="settings"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Live camera simulation image -->
+                        <div class="camera-live-feed">
+                            <div class="scrim top-scrim"></div>
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Camera Feed" class="feed-img">
+                            <div class="scrim bottom-scrim"></div>
+                            
+                            <!-- Floating Watermark Card Overlay -->
+                            <div class="watermark-card" id="mockup-watermark">
+                                <div class="map-tile-wrapper" id="mockup-map-container">
+                                    <div class="map-satellite-placeholder"></div>
+                                    <span class="attribution">Google</span>
+                                </div>
+                                <div class="info-stack">
+                                    <div class="info-header">
+                                        <h4 class="info-title" id="mockup-city">Bijainagar, Rajasthan, India 🇮🇳</h4>
+                                        <div class="logo-badge">
+                                            <svg class="badge-logo-icon" width="10" height="10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="50" cy="50" r="45" fill="#1565C0"/>
+                                                <polygon points="40,30 70,50 40,70" fill="#FFFFFF"/>
+                                            </svg>
+                                            <span>GeoProof</span>
+                                        </div>
+                                    </div>
+                                    <p class="info-sub" id="mockup-sub">Sanjay Nagar Rd, Moti Nagar, Bijainagar 305624</p>
+                                    <p class="info-coords font-mono" id="mockup-coords">Lat 25.9224°N   Long 74.6377°E</p>
+                                    <p class="info-alt font-mono" id="mockup-alt-acc">Alt: 312.4m   Acc: ±3m</p>
+                                    <p class="info-datetime" id="mockup-datetime">Wednesday 03/06/2026 12:10 PM GMT+05:30</p>
+                                    <p class="info-weather" id="mockup-weather"><span class="weather-icon">🌤️</span> 38°C Partly Cloudy</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solid Black Controls Panel -->
+                        <div class="camera-bottom-bar">
+                            <div class="gallery-thumbnail">
+                                <div class="thumb-img"></div>
+                            </div>
+                            <div class="shutter-button-outer">
+                                <div class="shutter-button-inner"></div>
+                            </div>
+                            <div class="flip-btn">
+                                <i data-lucide="rotate-cw"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Packed with Professional Features</h2>
+                <p>Designed for field surveys, travel logs, construction reporting, and site visits.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="map-pin"></i></div>
+                    <h3>Smart Geotagging</h3>
+                    <p>Captures precise location data instantly with automatic reverse geocoding to retrieve addresses.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="image"></i></div>
+                    <h3>Dynamic Card Overlay</h3>
+                    <p>Applies a premium, highly readable translucent card overlay in the bottom-right corner of your photo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="globe"></i></div>
+                    <h3>Satellite Map Tile</h3>
+                    <p>Queries Google Maps API on the fly to embed a matching satellite tile containing your exact survey location.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Permanent Branding</h3>
+                    <p>Binds your company logo permanently into the overlay to ensure verified, brand-certified photographic proof.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="cloud-sun"></i></div>
+                    <h3>Live Weather Data</h3>
+                    <p>Stamps real-time meteorological conditions, temperatures, and icons onto survey reports.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="clock"></i></div>
+                    <h3>Ticking Time Stamp</h3>
+                    <p>Provides highly accurate ticking timestamps with standard/custom dates and 12h/24h formats.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulator Customizer Section -->
+    <section id="simulator" class="simulator-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Interactive Watermark Simulator</h2>
+                <p>Customize the switches below and see how the live watermark overlay card updates instantly.</p>
+            </div>
+
+            <div class="simulator-grid">
+                <!-- Controls Panel -->
+                <div class="sim-controls-card">
+                    <h3>Overlay Customizer</h3>
+                    <div class="control-group">
+                        <div class="control-row">
+                            <div class="control-info">
+                                <span class="control-label">Coordinates Info</span>
+                                <span class="control-desc">Latitude, longitude, altitude and accuracy</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-coords" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-info">
+                                <span class="control-label">Detailed Address</span>
+                                <span class="control-desc">Full city, state, country and street lines</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-address" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-info">
+                                <span class="control-label">Satellite Map Tile</span>
+                                <span class="control-desc">Google Satellite visual coordinates tile</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-maptile" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-info">
+                                <span class="control-label">Weather Parameters</span>
+                                <span class="control-desc">Live temperature and sky conditions</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-weather" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Date & Time Format Selectors -->
+                    <div class="selector-group">
+                        <div class="select-row">
+                            <label for="select-date">Date Format</label>
+                            <select id="select-date">
+                                <option value="dd/MM/yyyy">DD/MM/YYYY</option>
+                                <option value="MM/dd/yyyy">MM/DD/YYYY</option>
+                                <option value="yyyy-MM-dd">YYYY-MM-DD</option>
+                                <option value="dd MMM yyyy" selected>DD MMM YYYY</option>
+                            </select>
+                        </div>
+                        <div class="select-row">
+                            <label for="select-time">Time Format</label>
+                            <select id="select-time">
+                                <option value="12h" selected>12-hour (09:34 AM)</option>
+                                <option value="24h">24-hour (21:34)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Preview Result Box -->
+                <div class="sim-preview-box">
+                    <div class="preview-header">
+                        <span class="preview-badge">Live Output Stamp</span>
+                        <div class="preview-window-btns"><span></span><span></span><span></span></div>
+                    </div>
+                    <div class="preview-photo-canvas">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Preview Photo" class="canvas-img">
+                        
+                        <!-- Real-time Rendering Overlay Card -->
+                        <div class="watermark-card" id="sim-watermark-card">
+                            <div class="map-tile-wrapper" id="sim-map-tile">
+                                <div class="map-satellite-placeholder"></div>
+                                <span class="attribution">Google</span>
+                            </div>
+                            <div class="info-stack">
+                                <div class="info-header">
+                                    <h4 class="info-title" id="sim-city">Bijainagar, Rajasthan, India 🇮🇳</h4>
+                                    <div class="logo-badge">
+                                        <svg class="badge-logo-icon" width="10" height="10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="50" cy="50" r="45" fill="#1565C0"/>
+                                            <polygon points="40,30 70,50 40,70" fill="#FFFFFF"/>
+                                        </svg>
+                                        <span>GeoProof</span>
+                                    </div>
+                                </div>
+                                <p class="info-sub" id="sim-sub">Sanjay Nagar Rd, Moti Nagar, Bijainagar 305624</p>
+                                <p class="info-coords font-mono" id="sim-coords">Lat 25.9224°N   Long 74.6377°E</p>
+                                <p class="info-alt font-mono" id="sim-alt-acc">Alt: 312.4m   Acc: ±3m</p>
+                                <p class="info-datetime" id="sim-datetime">Wednesday 03/06/2026 12:10 PM GMT+05:30</p>
+                                <p class="info-weather" id="sim-weather"><span class="weather-icon">🌤️</span> 38°C Partly Cloudy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works & Tech Architecture -->
+    <section id="architecture" class="architecture-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Technical Architecture & Workflows</h2>
+                <p>Engineered locally using Kotlin, CameraX, and fused GPS providers for optimal speed and reliability.</p>
+            </div>
+
+            <div class="arch-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-number">1</div>
+                    <div class="timeline-detail">
+                        <h4>CameraX Native Capture</h4>
+                        <p>High-resolution sensor data is grabbed using Android's native CameraX pipeline. Downsampling algorithms optimize size to avoid Out-Of-Memory errors during stamp drawing.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-number">2</div>
+                    <div class="timeline-detail">
+                        <h4>Fused GPS & Weather Querying</h4>
+                        <p>Simultaneously captures fine location coordinates via Google Play Location Services, fetches street names via Geocoder, and resolves current weather metrics through async background tasks.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-number">3</div>
+                    <div class="timeline-detail">
+                        <h4>Dynamic Canvas Overlay rendering</h4>
+                        <p>Stamps the translucent cards directly onto the Bitmap using Canvas drawing methods. Stamped details scale relative to image width to guarantee consistent display ratios on high-res photos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Block -->
+    <section id="download" class="download-section">
+        <div class="container download-box">
+            <div class="download-content">
+                <h2>Ready to Start Surveying?</h2>
+                <p>Deploy the app onto your Android device. Free from ads, analytics, or background trackers.</p>
+                <div class="download-btns">
+                    <a href="#" class="btn btn-download-primary">
+                        <i data-lucide="download"></i>
+                        <span>Download Stable APK v2.1</span>
+                    </a>
+                </div>
+            </div>
+            <div class="download-decor">
+                <i data-lucide="shield" class="decor-icon"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <p>&copy; 2026 GeoProof Camera. Built with premium Vanilla CSS & JS.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Documentation</a>
+                <a href="https://github.com">GitHub Repository</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="app.js"></script>
+</body>
 </html>

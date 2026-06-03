@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- Full-screen zoomable photo -->
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photoView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Top overlay: back button -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="44dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/gradient_top_scrim"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/btnViewerBack"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="#FFFFFFFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:text="GeoProof Photo"
+            android:textColor="#FFFFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Bottom action bar -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp"
+        android:paddingBottom="36dp"
+        android:background="@drawable/gradient_bottom_scrim"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- WhatsApp share -->
+        <LinearLayout
+            android:id="@+id/btnShareWhatsapp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="💬" android:textSize="28sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="WhatsApp" android:textColor="#CCFFFFFF" android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Share (general) -->
+        <LinearLayout
+            android:id="@+id/btnShare"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="📤" android:textSize="28sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Share" android:textColor="#CCFFFFFF" android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Delete -->
+        <LinearLayout
+            android:id="@+id/btnDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="🗑️" android:textSize="28sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Delete" android:textColor="#CCFFFFFF" android:textSize="11sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

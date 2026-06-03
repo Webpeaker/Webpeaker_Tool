@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gp_bg_navy">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Toolbar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/gp_bg_dark"
+            android:paddingStart="8dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="40dp"
+            android:paddingBottom="14dp">
+
+            <ImageView
+                android:id="@+id/btnSettingsBack"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="#FFFFFFFF"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Settings"
+                android:textColor="#FFFFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="2dp"
+            android:background="@color/gp_green" />
+
+        <!-- ── SECTION: Overlay Fields ── -->
+        <TextView style="@style/SectionHeader" android:text="📸  Photo Overlay Fields" />
+
+        <LinearLayout style="@style/SettingsCard" android:orientation="vertical">
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsLabel" android:text="Show Coordinates (Lat/Long)" />
+                <Switch android:id="@+id/swCoordinates" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:thumbTint="#00C853"
+                    android:trackTint="#33FFFFFF" />
+            </LinearLayout>
+
+            <View style="@style/Divider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsLabel" android:text="Show Full Address" />
+                <Switch android:id="@+id/swAddress" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:thumbTint="#00C853"
+                    android:trackTint="#33FFFFFF" />
+            </LinearLayout>
+
+            <View style="@style/Divider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsLabel" android:text="Show Date" />
+                <Switch android:id="@+id/swDate" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:thumbTint="#00C853"
+                    android:trackTint="#33FFFFFF" />
+            </LinearLayout>
+
+            <View style="@style/Divider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsLabel" android:text="Show Time" />
+                <Switch android:id="@+id/swTime" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:thumbTint="#00C853"
+                    android:trackTint="#33FFFFFF" />
+            </LinearLayout>
+
+            <View style="@style/Divider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsLabel" android:text="Show Weather Info" />
+                <Switch android:id="@+id/swWeather" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:thumbTint="#00C853"
+                    android:trackTint="#33FFFFFF" />
+            </LinearLayout>
+
+            <View style="@style/Divider" />
+
+
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsLabel" android:text="Show Satellite Map Tile" />
+                <Switch android:id="@+id/swMapTile" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:thumbTint="#00C853"
+                    android:trackTint="#33FFFFFF" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- ── SECTION: Date & Time ── -->
+        <TextView style="@style/SectionHeader" android:text="🕒  Date &amp; Time Format" />
+
+        <LinearLayout style="@style/SettingsCard" android:orientation="vertical">
+
+            <TextView style="@style/SettingsSubLabel" android:text="Date Format" />
+            <Spinner
+                android:id="@+id/spinnerDateFormat"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="#00C853"
+                android:popupBackground="@color/gp_surface" />
+
+            <View style="@style/Divider" android:layout_marginTop="8dp" />
+
+            <TextView style="@style/SettingsSubLabel" android:layout_marginTop="8dp" android:text="Time Format" />
+            <Spinner
+                android:id="@+id/spinnerTimeFormat"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="#00C853"
+                android:popupBackground="@color/gp_surface" />
+
+        </LinearLayout>
+
+
+
+        <!-- ── SECTION: Weather ── -->
+        <TextView style="@style/SectionHeader" android:text="🌤️  Weather API" />
+
+        <LinearLayout style="@style/SettingsCard" android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Free API key from openweathermap.org\n(60 calls/min, no credit card)"
+                android:textColor="#80FFFFFF"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/etWeatherKey"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/card_background"
+                android:hint="Paste OpenWeatherMap API key here"
+                android:textColorHint="#66FFFFFF"
+                android:textColor="#FFFFFFFF"
+                android:padding="12dp"
+                android:inputType="text"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/btnSaveWeather"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="10dp"
+                android:text="Save API Key"
+                android:textColor="#FF0A1628"
+                android:backgroundTint="#FF00C853" />
+
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="32dp" />
+
+    </LinearLayout>
+</ScrollView>

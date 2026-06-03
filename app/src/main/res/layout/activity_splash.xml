@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Splash screen: blue gradient, centered logo + text -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/splash_background"
+    android:padding="40dp">
+
+    <!-- Camera pin icon -->
+    <ImageView
+        android:id="@+id/ivSplashLogo"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:src="@drawable/ic_launcher"
+        android:contentDescription="GeoProof Logo" />
+
+    <View android:layout_width="0dp" android:layout_height="24dp" />
+
+    <!-- GeoProof title: "Geo" white, "Proof" green -->
+    <TextView
+        android:id="@+id/tvSplashTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GeoProof Camera"
+        android:textColor="#FFFFFFFF"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.02" />
+
+    <TextView
+        android:id="@+id/tvSplashTagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Proof. Location. Trust."
+        android:textColor="#CC00C853"
+        android:textSize="14sp"
+        android:letterSpacing="0.1" />
+
+    <TextView
+        android:id="@+id/tvSplashVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="v2.0"
+        android:textColor="#66FFFFFF"
+        android:textSize="12sp" />
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Background circle -->
+    <path
+        android:fillColor="#FF1A1A2E"
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z"/>
+    <!-- Camera body -->
+    <path
+        android:fillColor="#FF6DFFB5"
+        android:pathData="M78,40H68.5l-3.5,-4H43l-3.5,4H30c-3.3,0 -6,2.7 -6,6v28c0,3.3 2.7,6 6,6h48c3.3,0 6,-2.7 6,-6V46C84,42.7 81.3,40 78,40zM54,72c-7.7,0 -14,-6.3 -14,-14s6.3,-14 14,-14s14,6.3 14,14S61.7,72 54,72z"/>
+    <!-- Lens circle -->
+    <path
+        android:fillColor="#FF1A1A2E"
+        android:pathData="M54,48c-5.5,0 -10,4.5 -10,10s4.5,10 10,10s10,-4.5 10,-10S59.5,48 54,48z"/>
+    <!-- GPS pin -->
+    <path
+        android:fillColor="#FF6DFFB5"
+        android:pathData="M54,22c-4.4,0 -8,3.6 -8,8c0,6 8,16 8,16s8,-10 8,-16C62,25.6 58.4,22 54,22zM54,33c-1.7,0 -3,-1.3 -3,-3s1.3,-3 3,-3s3,1.3 3,3S55.7,33 54,33z"/>
+</vector>
